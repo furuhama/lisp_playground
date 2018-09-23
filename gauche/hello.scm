@@ -48,22 +48,27 @@
 
 ;; Global procedure definition
 
-(define (square x) (* x x))
-(print (square 19)) ; 361
+(define (times x y) (* x y))
+(print (times 19 19)) ; 361
 
 ;; Global prosedure definition with some other procedures
 
 (define (my-sqrt x)
-  (define (average x y)
-    (/ (+ x y) 2))
-  (define (good-enough? guess)
-    (< (abs (- (square guess) x)) 0.001))
-  (define (improve guess)
-    (average guess (/ x guess)))
-  (define (sqrt-iter guess)
-    (if (good-enough? guess)
+  (define (square x)
+    (* x x))
+  (define (average p q)
+    (/ (+ p q) 2))
+  (define (good-enough? guess target)
+    (< (abs (- (square guess) target))
+       0.001))
+  (define (improve guess target)
+    (average guess
+             (/ target guess)))
+  (define (sqrt-iter guess target)
+    (if (good-enough? guess target)
       guess
-      (sqrt-iter (improve guess))))
-  (sqrt-iter 1.0))
+      (sqrt-iter (improve guess target) target)))
+  (sqrt-iter 1.0 x))
 
 (print (my-sqrt 5)) ; 2.2360688956433634
+(print (my-sqrt 120)) ; 10.954451151558928
